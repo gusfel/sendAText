@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Login from './Login.jsx';
 
 class App extends React.Component {
   constructor(props) {
@@ -7,9 +8,14 @@ class App extends React.Component {
     this.state = {
       to: '',
       message: '',
+      page: 'login',
+      user_id: null,
+      username: '',
+      friends: [],
     };
     this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.updateUser = this.updateUser.bind(this);
   }
 
   handleInputChange(event) {
@@ -31,7 +37,22 @@ class App extends React.Component {
     event.preventDefault();
   }
 
+  updateUser(obj) {
+    const { userId, username } = obj;
+    this.setState({
+      userId,
+      username,
+      page: 'main',
+    });
+  }
+
   render() {
+    const { to, message, page } = this.state;
+    if (page === 'login') {
+      return (
+        <Login updateUser={this.updateUser} />
+      );
+    }
     return (
       <form onSubmit={this.handleSubmit}>
         <label>
@@ -39,7 +60,7 @@ class App extends React.Component {
           <input
             name="to"
             type="number"
-            value={this.state.to}
+            value={to}
             onChange={this.handleInputChange}
           />
         </label>
@@ -49,7 +70,7 @@ class App extends React.Component {
           <input
             name="message"
             type="text"
-            value={this.state.message}
+            value={message}
             onChange={this.handleInputChange}
           />
         </label>
